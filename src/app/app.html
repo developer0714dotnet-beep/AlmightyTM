@@ -1,0 +1,33 @@
+<header class="header">
+ <app-header></app-header>
+</header>
+<app-navbar></app-navbar>
+
+<main>
+  <router-outlet />
+</main>
+
+<footer>
+  <app-footer></app-footer>
+</footer>
+
+<!-- Loading Part -->
+  @if (taskService.isLoading()) {
+    <div class="container d-flex justify-content-center align-items-center text-center buffer">
+      <!-- <video src="assets/images/Sandy Loading.webm" autoplay loop preload="auto"></video> -->
+       <div class="loader-20"></div>
+    </div>
+  }
+
+<!-- Error Part -->
+  @else if (taskService.error() != null) {
+    <div class="container buffer" [class.d-none] = "isHidden">
+      <div class="close-btn d-flex justify-content-end m-4">
+        <i class="fa-solid fa-xmark close-icon p-2 text-center rounded-circle"  
+          (click)="hide()"></i>
+      </div>
+      <div class="d-flex justify-content-center align-items-center text-center ">
+        <div class="went-wrong d-flex justify-content-center align-items-center">{{taskError()}}</div>
+      </div>
+    </div>
+  }

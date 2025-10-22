@@ -1,0 +1,78 @@
+@if(showHeader()){
+<nav class="navbar navbar-expand-md">
+  <div class="container-fluid ps-0 " style="height: 100%;">
+      
+    <!-- Burger button -->
+    <div>
+      <button class="navbar-toggler d-block ms-md-2" type="button" 
+              data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" 
+              aria-controls="offcanvasExample">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <!-- Brand -->
+    <a class="navbar-brand ms-2" routerLink="/">Almighty</a>
+
+  @if(showSearchComp()){
+    <!-- Large Screen Search Bar -->
+    <div class="search-container flex-grow-1 d-flex justify-content-center">
+      <form class="search-form d-flex" role="search">
+        <input class="form-control search-input d-none d-md-flex me-2" 
+              type="search" 
+              placeholder="Search" 
+              aria-label="Search"
+              [value]="searchTerm()"
+              (input)="getSearchTerm($event)"
+              (focus)="toggleSearchContainer(true)"
+              (blur)="toggleSearchContainer(false)"/>
+      </form>
+    </div>
+  }
+
+  <!-- Profile -->
+  <div class="user-profile me-0 ms-auto d-flex justify-content-center align-items-center">
+    <img src="/assets/images/profile-user.png" alt="user">
+    <div class="dropdown-content">
+      <ul>
+        <li routerLink="profile/{{user().id}}/{{user().userName}}">
+          Profile
+        </li>
+        <li (click)="toggleRegionMenu()">Country</li>
+            <div class="internal-dropdown" [class.show]="regionOpen()">
+                <div (click)="setRegion('Ind')" [ngClass]="dateRegion() === 'India' ? 'dot' : ''">India</div>
+                <div (click)="setRegion('US')" [ngClass]="dateRegion() === 'US' ? 'dot' : ''"> US</div>
+                <div (click)="setRegion('ISO')" [ngClass]="dateRegion() === 'Asia' ? 'dot' : ''">Asia</div>
+            </div>
+        <li>Sign Out</li>
+      </ul>
+    </div>
+  </div>
+<div class="region ms-3 p-1">{{dateRegion()}}<i class="fa-solid fa-globe"></i></div>
+  </div>
+</nav>
+@if(showSearchComp()){
+  <!-- Mobile Search Bar -->
+  <div class="container d-flex d-md-none mx-0 p-3 search-mobile">
+    <button class="btn d-flex search-icon" type="button"> <i class="fas fa-search"></i> </button>
+    <input class="form-control search-input d-flex me-2" 
+                type="search" 
+                placeholder="Search" 
+                aria-label="Search"
+                (input)="getSearchTerm($event)"/>
+  </div>
+}
+
+
+
+
+  <div class="container m-auto search-res-container" [class.show]="searchContainer()">
+    @for (todo of todos(); track todo.id) {
+      <div class="search-result"
+            (click)="resetSearchTerm(todo.id)">
+        <h5>{{todo.title}}</h5>
+      </div>  
+    }
+  </div>
+
+}

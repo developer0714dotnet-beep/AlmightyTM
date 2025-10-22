@@ -1,0 +1,65 @@
+<div class="container multiForm my-5">
+  <h2 class="mx-4 my-3 pb-4">Almighty</h2>
+  <form #taskForm="ngForm" (ngSubmit)="updateTask(taskForm.value)" style="width: 100%" class="px-4">
+    <div class="mb-3">
+      <input
+        type="text"
+        minlength="3"
+        maxlength="20"
+        pattern="[a-zA-Z0-9 ]+"
+        class="form-control"
+        id="title"
+        name="title"
+        #title="ngModel"
+        required
+        placeholder="Enter task title"
+        aria-describedby="enter task title"
+        [ngModel] = "task().title"
+      />
+      @if (title.invalid && (title.dirty || title.touched)) {
+        <div  id="error" class="form-text">*Please Enter a Valid Title</div>
+      }
+      
+    </div>
+
+    <div class="mb-3 mt-4">
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        aria-describedby="task Description"
+        placeholder="Describe your task"
+        name="description"
+        [ngModel] = "task().description"
+      />
+    </div>
+
+    <div class="mb-3 mt-4 passwordForm">
+      <input
+        type="date"
+        class="form-control"
+        id="dueDate"
+        name="dueDate"
+        #dueDate="ngModel"
+        required
+        placeholder="Set Due Date"
+        aria-describedby="Set Due Date"
+        [ngModel] ="task().dueDate" required/>
+
+      <input
+        type="time"
+        class="form-control"
+        id="dueTime"
+        name="dueTime"
+        #dueTime="ngModel"
+        required
+        aria-describedby="Set Due time"
+        [ngModel] ="task().dueTime" required/>
+    </div>
+      @if (dueDate.invalid && (dueDate.dirty || dueDate.touched)) {
+        <div  id="error" class="form-text">*Please Set a Valid Due Date</div>
+      }
+
+    <button type="submit" [disabled]="taskForm.invalid" class="btn btn-primary mt-3">Update Task</button>
+  </form>
+</div>

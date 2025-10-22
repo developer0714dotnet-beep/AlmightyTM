@@ -1,0 +1,27 @@
+<app-tasks
+  title="Completed Tasks"
+  [todos]="completeTasks()"
+  [currentPage]="currentPage()"
+  (OnChecked)="checked($event)"
+  (OnDeleteTodo)="deleteTask($event)"
+></app-tasks>
+<!-- Pagination Controls -->
+<div class="d-flex justify-content-center align-items-center my-3">
+  <button
+    class="btn btn-warning me-2 p-1 rounded-circle"
+    (click)="goToPrev()"
+    [disabled]="currentPage() === 1"
+  >
+    <i class="fa-solid fa-arrow-left"></i>
+  </button>
+
+  <span>Page {{ currentPage() }} of {{ totalPages() }}</span>
+  
+  <button
+    class="btn btn-warning ms-2 p-1 rounded-circle"
+    (click)="goToNext()"
+    [disabled]="currentPage() === totalPages()"
+  >
+    <i class="fa-solid fa-arrow-right"></i>
+  </button>
+</div>

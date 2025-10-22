@@ -1,0 +1,85 @@
+<div class="container tasks d-flex flex-column justify-content-start pt-0 mx-0 mx-sm-auto my-2 mt-md-5 px-0 w-90 w-lg-70">
+  <div class="wallet-title px-4 my-4 d-flex justify-content-between align-items-center">
+    <h2 class="m-0">{{title()}}</h2>
+    @if(!taskService.isLoading() && !taskService.error() && todos().length > 0){
+      @if(!todos()[0].completed){
+        <button class="btn btn-warning" 
+                routerLink="/addTask" 
+                ngbTooltip="Add Task" 
+                [disabled]="taskService.isLoading() || taskService.error()">
+                <i class="fa-solid fa-plus"></i>
+        </button>
+      } @else {
+        <div class="empty"></div>
+      }
+    }
+  </div>
+ 
+
+<!-- If data is fetched correctly -->
+  @if(todos() && todos().length > 0) {
+  <cdk-virtual-scroll-viewport appendOnly itemSize="6" class="tarnsList text-white mt-2">
+    <div *cdkVirtualFor="let todo of todos(); trackBy: trackById"
+        class="indTask py-3 px-3 d-flex justify-content-between"
+        >
+
+      <!-- Main Task Row -->
+      <div class="task-item d-flex justify-content-between align-items-center"
+          [class.completed]="todo.completed">
+
+        <!-- Checkbox -->
+        <input
+          type="checkbox"
+          class="task-check mt-2 mb-auto rounded-circle"
+          [checked]="todo.completed"
+          (change)="checked(todo.id)"
+        />
+
+        <!-- Task Content -->
+        <div class="d-flex task-detail flex-column ms-3 me-auto"
+        [routerLink]=" '/taskDesc/' + todo.id">
+          <div class="task-text flex-grow-1" [class.text-danger]="getOverDueTasks(todo.id)">
+            {{ todo.title }} <span style="font-size: 14px;"> {{ getOverDueTasks(todo.id) ? '(DUE)' : '' }}</span>
+          </div>
+          <div class="task-date mx-0 position-relative">{{ todo.dueDate+'T'+todo.dueTime | datePerRegion:region()}}</div>
+        </div>
+      </div>
+
+      <!-- Task Actions -->
+      <div class="task-actions d-flex justify-content-end ms-auto me-0">
+        <i class="fa-solid fa-pen-to-square mt-2"
+          ngbTooltip="Edit Task"
+          [routerLink]="'/editTask/' + todo.id"></i>
+
+        <i class="fa-solid fa-trash-can ms-3 mt-2"
+          ngbTooltip="Delete Task"
+          (click)="deleteTodo(todo.id)"></i>
+      </div>
+    </div>
+  </cdk-virtual-scroll-viewport>
+  } @else {
+  <div class="text-center d-flex align-items-center justify-content-center mt-5 fw-bold fs-4">
+    No tasks available
+  </div>
+  }
+</div>
+
+
+
+<!-- Notification for Task -->
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3 d-flex flex-column-reverse gap-2">
+  @for (task of underDueTasks(); track $index) {
+    <div #toastElement class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <span><i class="fa-solid fa-bell text-danger"></i>&nbsp;</span>
+        <strong class="me-auto text-danger">{{ task.title }}</strong>
+        <small class="text-danger">{{ task.timeLeft }}</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body text-dark">
+        Task is overdue.
+      </div>
+    </div>
+  }
+</div>

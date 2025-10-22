@@ -1,0 +1,27 @@
+<div class="container taskDesc">
+  <div class="descImage">
+    @if (!imageUrl()) {
+      <img src="/assets/images/Placeholder.jpg" class="img-fluid" alt="random-pics" width="700px" height="300px">
+    }
+    @else {
+      <img [src]="imageUrl()" class="img-fluid" alt="random-pics">
+    }
+  </div>
+    <div class="taskDesc-title">
+        <h2>{{task()?.title}}</h2>
+        <div class="task-actions d-flex justify-content-end ms-auto me-0">
+        <i class="fa-solid fa-pen-to-square mt-2 taskDesc-i"
+          ngbTooltip="Edit Task"
+          [routerLink]="'/editTask/' + task()?.id"></i>
+
+        <i class="fa-solid fa-trash-can ms-3 mt-2 taskDesc-i"
+          ngbTooltip="Delete Task"
+          (click)="deleteTodo(task()?.id!)"></i>
+      </div>
+    </div>
+
+    <div class="taskDesc-body mt-5">
+      <h5>{{task()?.dueDate +'T'+task()?.dueTime | datePerRegion:regionDate}}</h5>
+        <p>{{task()?.description}}</p>
+    </div>
+</div>
